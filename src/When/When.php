@@ -547,18 +547,16 @@ class When extends \DateTime
 
                 $daysLeft = 7;
 
-                // not very happy with this
                 if ($count === 0)
                 {
                     $startWeekDay = clone $this->startDate;
 
+                    // if not starting at the start of the week, rewind to the beginning so we check 1 week range at a time
                     if ($startWeekDay->format('l') != $wkst) {
                         $startWeekDay->modify("last " . $wkst);
-                        $daysLeft = intval($startWeekDay->format('j')) - intval($dateLooper->format("j"));
-                    } else {
-                        $daysLeft = 7;
                     }
 
+                    $dateLooper->setDate($startWeekDay->format("Y"), $startWeekDay->format("n"), $startWeekDay->format("j"));
                 }
 
                 while ($daysLeft > 0)
