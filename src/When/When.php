@@ -551,12 +551,14 @@ class When extends \DateTime
                 if ($count === 0)
                 {
                     $startWeekDay = clone $this->startDate;
-                    $startWeekDay->modify("last " . $wkst);
-                    $startWeekDay->modify("+7 days");
 
-                    $daysLeft = intval($startWeekDay->format('j')) - intval($dateLooper->format("j"));
+                    if ($startWeekDay->format('l') != $wkst) {
+                        $startWeekDay->modify("last " . $wkst);
+                        $daysLeft = intval($startWeekDay->format('j')) - intval($dateLooper->format("j"));
+                    } else {
+                        $daysLeft = 7;
+                    }
 
-                    $startWeekDay->modify("-7 days");
                 }
 
                 while ($daysLeft > 0)
