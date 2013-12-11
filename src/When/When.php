@@ -15,6 +15,7 @@ class When extends \DateTime
     public $byhours;
     public $bydays;
     public $bymonthdays;
+    public $bymonthdayoffsets;
     public $byyeardays;
     public $byweeknos;
     public $bymonths;
@@ -156,6 +157,22 @@ class When extends \DateTime
         throw new \InvalidArgumentException("bymonthday: Accepts positive and negative values between 1 and 31");
     }
 
+    public function bymonthdayoffset($bymodaylist, $delimiter = ",")
+    {
+        if (!is_array($bymodaylist)) {
+            $bymodaylist = array($bymodaylist);
+        }
+        array_walk($bymodaylist, function(&$date) {
+            $date = explode('/', $date);
+            $date[1] = strtolower($date[1]);
+        });
+        if($this->bymonthdayoffsets = self::prepareItemsList($bymodaylist, $delimiter, 'monthDayOffset'))
+        {
+            return $this;
+        }
+        throw new \InvalidArgumentException("bymonthdayoffset: Accepts month & day indexes separated by /");
+    }
+
     public function byyearday($byyrdaylist, $delimiter = ",")
     {
         if($this->byyeardays = self::prepareItemsList($byyrdaylist, $delimiter, 'yearDayNum'))
@@ -237,6 +254,7 @@ class When extends \DateTime
                     break;
                 case "BYDAY":
                 case "BYMONTHDAY":
+                case "BYMONTHDAYOFFSET":
                 case "BYYEARDAY":
                 case "BYWEEKNO":
                 case "BYMONTH":
@@ -332,6 +350,23 @@ class When extends \DateTime
             if (!in_array($day, $this->bymonthdays) &&
                 !in_array($dayFromEndOfMonth, $this->bymonthdays))
             {
+                return false;
+            }
+        }
+
+        if (isset($this->bymonthdayoffsets))
+        {
+            $found = false;
+            foreach ($this->bymonthdayoffsets as $offset) {
+                if ($month == $offset[0] && (
+                    0 . $dayOfWeekAbr == $offset[1] ||
+                    $occur . $dayOfWeekAbr == $offset[1] ||
+                    $occurNeg . $dayOfWeekAbr == $offset[1]))
+                {
+                    $found = true;
+                }
+            }
+            if (!$found) {
                 return false;
             }
         }

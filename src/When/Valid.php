@@ -101,6 +101,17 @@ class Valid
         return self::ordMoDay(abs($day));
     }
 
+    public static function monthDayOffset($date)
+    {
+        @list($month, $offset) = $date;
+
+        if (!$month || !$offset) {
+            return false;
+        }
+
+        return self::monthNum($month) && self::daysList(array($offset));
+    }
+
     public static function monthNum($month)
     {
         return ($month >= 1 && $month <= 12);
