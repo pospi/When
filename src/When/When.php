@@ -57,7 +57,7 @@ class When extends \DateTime
 
         // move start forwards until we have a match
 
-        if (isset($this->bydays) || isset($this->bymonthdays) || isset($this->byyeardays)) {
+        if (isset($this->bydays) || isset($this->bymonthdays) || isset($this->byyeardays) || isset($this->bymonthdayoffsets) || isset($this->byyeardates)) {
             while (!$this->occursOn($this->startDate) && $this->startDate <= $this->until) {
                 $this->startDate->add(new \DateInterval('P1D'));
                 list($year, $month, $day, $dayFromEndOfMonth, $week, $weekDay, $dayOfWeek, $dayOfWeekAbr, $yearDay, $yearDayNeg, $leapYear) = self::getDateComponents($this->startDate);
@@ -829,7 +829,7 @@ class When extends \DateTime
 
         if ($this->freq === "yearly")
         {
-            if (!isset($this->bymonthdays) && !isset($this->bydays) && !isset($this->bymonths) && !isset($this->byyeardays) && !isset($this->byweeknos))
+            if (!isset($this->bymonthdays) && !isset($this->bydays) && !isset($this->bymonths) && !isset($this->byyeardays) && !isset($this->byweeknos) && !isset($this->bymonthdayoffsets) && !isset($this->byyeardates))
             {
             	$this->bymonths = array($this->startDate->format('n'));
                 $this->bymonthdays = array($this->startDate->format('j'));
